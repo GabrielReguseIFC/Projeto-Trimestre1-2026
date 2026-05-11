@@ -1,14 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+package com.mycompany.projetofinal;
 
-/**
- *
- * @author aluno
- */
-public interface PerfilUsuario {
-  int COORDENADOR = 1;
-    int SUPERVISOR = 2;
-    int INSTRUTOR = 3;
+public enum PerfilUsuario {
+    COORDENADOR,
+    SUPERVISOR,
+    INSTRUTOR
 }
