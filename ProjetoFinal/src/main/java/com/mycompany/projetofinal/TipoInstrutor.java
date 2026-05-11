@@ -1,6 +1,6 @@
 package com.mycompany.projetofinal;
 
-public enum TipoTreinamento {
+public enum TipoInstrutor {
     INTERNO,
     EXTERNO
 }

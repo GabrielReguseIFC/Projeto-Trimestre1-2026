@@ -1,53 +1,95 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.projetofinal;
 
-/**
- *
- * @author aluno
- */
 public class Participacao {
-    //atributos
+
+    // atributos
     private int id;
     private StatusParticipacao status;
-    private String nome;
     private double frequencia;
-    private double rota;
-    
-    //relaconamentos
+    private double nota;
+
     private Bombeiro bombeiro;
     private Treinamento treinamento;
-    private Certificado certificado;
-    
-    //construtor
 
-    public Participacao(int id, StatusParticipacao status, String nome, double frequencia, double rota, Bombeiro bombeiro, Treinamento treinamento) {
+    // construtor
+    public Participacao(int id, StatusParticipacao status, double frequencia, double nota, Bombeiro bombeiro, Treinamento treinamento) {
         this.id = id;
         this.status = status;
-        this.nome = nome;
         this.frequencia = frequencia;
-        this.rota = rota;
+        this.nota = nota;
         this.bombeiro = bombeiro;
         this.treinamento = treinamento;
     }
-    
-    //metodos
-    public boolean registrar(){
-        System.out.println("Participacao registrada para: " + nome);
+
+    // metodos
+    public boolean registrar() {
+        if (!validarParticipante()) {
+            System.err.println("Erro: bombeiro inativo ou nao cadastrado.");
+            return false;
+        }
+        System.out.println("Participacao registrada com sucesso.");
         return true;
     }
-    
-    public boolean atualizar(){
-        System.out.println("Participacao atualizada: id= " + id);
+
+    public boolean atualizar() {
+        System.out.println("Participacao atualizada: id=" + id);
         return true;
     }
-    
-    public boolean validarParticipacao(){
+
+    public boolean validarParticipante() {
         return bombeiro != null && bombeiro.isAtivo();
     }
-    
-    public boolean isConcluido()
-    //get set
+
+    public boolean isConcluido() {
+        return status == StatusParticipacao.CONCLUIDO;
+    }
+
+    // gets sets
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public StatusParticipacao getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusParticipacao status) {
+        this.status = status;
+    }
+
+    public double getFrequencia() {
+        return frequencia;
+    }
+
+    public void setFrequencia(double frequencia) {
+        this.frequencia = frequencia;
+    }
+
+    public double getNota() {
+        return nota;
+    }
+
+    public void setNota(double nota) {
+        this.nota = nota;
+    }
+
+    public Bombeiro getBombeiro() {
+        return bombeiro;
+    }
+
+    public void setBombeiro(Bombeiro bombeiro) {
+        this.bombeiro = bombeiro;
+    }
+
+    public Treinamento getTreinamento() {
+        return treinamento;
+    }
+
+    public void setTreinamento(Treinamento treinamento) {
+        this.treinamento = treinamento;
+    }
 }

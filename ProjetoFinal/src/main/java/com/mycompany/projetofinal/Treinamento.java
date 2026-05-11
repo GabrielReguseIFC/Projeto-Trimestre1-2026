@@ -1,36 +1,27 @@
+package com.mycompany.projetofinal;
 
-import java.util.Date;
-import java.util.List;
+import java.util.ArrayList;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-/**
- *
- * @author aluno
- */
 public class Treinamento {
 
-    // Atributos
+    // atributos
     private int id;
     private String nome;
     private String descricao;
     private TipoTreinamento tipo;
     private int cargaHoraria;
-    private Date dataInicio;
-    private Date dataFim;
+    private String dataInicio;
+    private String dataFim;
     private StatusTreinamento status;
     private String local;
 
-    // Relacionamentos
     private Instituicao instituicao;
     private Instrutor instrutor;
-    private Certificado certificado;
-    private List<Participacao> participacoes = new ArrayList<>();
+    private ArrayList<Participacao> participacoes = new ArrayList<Participacao>();
+    private ArrayList<Certificado> certificados = new ArrayList<Certificado>();
 
-    // Construtores
-    public Treinamento(int id, String nome, String descricao, TipoTreinamento tipo, int cargaHoraria, Date dataInicio, Date dataFim, StatusTreinamento status, String local, Instituicao instituicao, Instrutor instrutor, Certificado certificado) {
+    // construtor
+    public Treinamento(int id, String nome, String descricao, TipoTreinamento tipo, int cargaHoraria, String dataInicio, String dataFim, StatusTreinamento status, String local, Instrutor instrutor) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -40,32 +31,31 @@ public class Treinamento {
         this.dataFim = dataFim;
         this.status = status;
         this.local = local;
-        this.instituicao = instituicao;
         this.instrutor = instrutor;
-        this.certificado = certificado;
     }
 
-    // Metodos
+    // metodos
     public boolean cadastrar() {
-        if (validarDados()) {
-            System.out.println("Treinamento cadastrado: " + nome);
-            return true;
+        if (!validarDados()) {
+            System.err.println("Erro: dados invalidos para o treinamento.");
+            return false;
         }
-        return false;
+        System.out.println("Treinamento cadastrado: " + nome);
+        return true;
     }
 
-    public String consultar(List<String> filtros) {
-        return "Treinamento [id=" + id + ", nome=" + nome + ", statu=" + status + "local=" + local + "]";
+    public String consultar() {
+        return "Treinamento [id=" + id + ", nome=" + nome + ", tipo=" + tipo + ", status=" + status + ", local=" + local + "]";
     }
 
     public boolean atualizar() {
-        System.out.println("Treinamento atualiado: " + nome);
+        System.out.println("Treinamento atualizado: " + nome);
         return true;
     }
 
     public boolean excluir() {
-        if (verificarVinculos) {
-            System.out.println("Não é possivel apagar: treinamento possui vinculos");
+        if (verificarVinculos()) {
+            System.out.println("Exclusao nao permitida: treinamento possui certificados emitidos.");
             return false;
         }
         System.out.println("Treinamento excluido: " + nome);
@@ -73,15 +63,31 @@ public class Treinamento {
     }
 
     public boolean validarDados() {
-        return nome != null && !nome.isEmpty() && cargaHoraria > 0 && dataInicio != null && dataFim != null && !dataFim.before(dataInicio);
+        if (nome == null || nome.isEmpty()) {
+            return false;
+        }
+        if (cargaHoraria <= 0) {
+            return false;
+        }
+        if (dataInicio == null || dataFim == null) {
+            return false;
+        }
+        if (tipo == TipoTreinamento.EXTERNO && instituicao == null) {
+            System.err.println("Erro: treinamento externo precisa de uma instituicao.");
+            return false;
+        }
+        return true;
     }
 
-    public void acessarParticipantes(Bombeiro bombeiro) {
-        System.out.println("Participações: " + bombeiro.getNome() + " no treinamento " + nome + ":");
-        for (Participacao p : participacoes) {
-            if (p.getBombeiro() != null && p.getBombeiro().getId() == bombeiro.getId()) {
-                System.out.println("status: " + p.getStatus() + " nota: " + p.getNota() + " fre: " + p.getFrequencia() + "%");
+    public void acessarParticipantes() {
+        System.out.println("Participantes do treinamento: " + nome);
+        for (int i = 0; i < participacoes.size(); i++) {
+            Participacao p = participacoes.get(i);
+            String nomeBombeiro = "desconhecido";
+            if (p.getBombeiro() != null) {
+                nomeBombeiro = p.getBombeiro().getNome();
             }
+            System.out.println("  - " + nomeBombeiro + " | " + p.getStatus());
         }
     }
 
@@ -92,10 +98,10 @@ public class Treinamento {
     }
 
     public boolean verificarVinculos() {
-        return this.certificado != null || !this.participacoes.isEmpty();
+        return certificados.size() > 0;
     }
 
-    // Gets Sets
+    // gets sets
     public int getId() {
         return id;
     }
@@ -136,19 +142,19 @@ public class Treinamento {
         this.cargaHoraria = cargaHoraria;
     }
 
-    public Date getDataInicio() {
+    public String getDataInicio() {
         return dataInicio;
     }
 
-    public void setDataInicio(Date dataInicio) {
+    public void setDataInicio(String dataInicio) {
         this.dataInicio = dataInicio;
     }
 
-    public Date getDataFim() {
+    public String getDataFim() {
         return dataFim;
     }
 
-    public void setDataFim(Date dataFim) {
+    public void setDataFim(String dataFim) {
         this.dataFim = dataFim;
     }
 
@@ -184,20 +190,19 @@ public class Treinamento {
         this.instrutor = instrutor;
     }
 
-    public Certificado getCertificado() {
-        return certificado;
-    }
-
-    public void setCertificado(Certificado certificado) {
-        this.certificado = certificado;
-    }
-
-    public List<Participacao> getParticipacoes() {
+    public ArrayList<Participacao> getParticipacoes() {
         return participacoes;
     }
 
-    public void setParticipacoes(List<Participacao> participacoes) {
-        this.participacoes = participacoes;
+    public void adicionarParticipacao(Participacao p) {
+        participacoes.add(p);
     }
 
+    public ArrayList<Certificado> getCertificados() {
+        return certificados;
+    }
+
+    public void adicionarCertificado(Certificado c) {
+        certificados.add(c);
+    }
 }

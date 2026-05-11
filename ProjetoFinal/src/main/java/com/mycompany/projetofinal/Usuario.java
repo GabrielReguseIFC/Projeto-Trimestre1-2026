@@ -1,70 +1,78 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+package com.mycompany.projetofinal;
 
-/**
- *
- * @author aluno
- */
 public class Usuario {
 
+    // atributos
     private int id;
     private String login;
     private String senha;
-    private int perfil;
-    
-    public Usuario (int id, String login, String senha, int perfil){
+    private PerfilUsuario perfil;
+
+    // construtor
+    public Usuario(int id, String login, String senha, PerfilUsuario perfil) {
         this.id = id;
         this.login = login;
         this.senha = senha;
         this.perfil = perfil;
     }
-    
-    public boolean autenticar (String login, String senha){
-        boolean ok = this.login.equals(login) && this.senha.equals(senha);
-        System.out.println("Autenticação: " + (ok ? "bem sucedida" : "falhou") + "para" + login);
-        return ok;
+
+    // metodos
+    public boolean autenticar(String login, String senha) {
+        if (this.login.equals(login) && this.senha.equals(senha)) {
+            System.out.println("Login bem-sucedido: " + login);
+            return true;
+        }
+        System.err.println("Login ou senha incorretos.");
+        return false;
     }
-    public void gerenciarTreino(Treinamento treinamento){
-        if (hasPermissao(PerfilUsuario.COORDENADOR) || hasPermissao(PerfilUsuario.SUPERVISOR)) {
+
+    public void gerenciarTreino(Treinamento treinamento) {
+        if (perfil == PerfilUsuario.COORDENADOR || perfil == PerfilUsuario.SUPERVISOR) {
             System.out.println("Gerenciando treinamento: " + treinamento.getNome());
-        }else{
-            System.out.println("Sem permissão para gerenciar treinamentos");
+        } else {
+            System.out.println("Sem permissao para gerenciar treinamentos.");
         }
     }
-    public boolean hasPermissao (int acao){
-        return this.perfil == acao;
+
+    public boolean hasPermissao(PerfilUsuario perfilNecessario) {
+        return this.perfil == perfilNecessario;
     }
-    public int logout(){
-        System.out.println("Usuario" + login + "desconectado");
+
+    public int logout() {
+        System.out.println("Usuario " + login + " desconectado.");
         return 0;
     }
-    
-    public int getId (){
+
+    // gets sets
+    public int getId() {
         return id;
     }
-    public void setId (int id) {
+
+    public void setId(int id) {
         this.id = id;
     }
-    
-    public String getLogin(){
+
+    public String getLogin() {
         return login;
     }
-    public void setLogin (String login){
+
+    public void setLogin(String login) {
         this.login = login;
     }
-    
-    public String getSenha(){
+
+    public String getSenha() {
         return senha;
     }
-    public void setSenha(String senha){
+
+    public void setSenha(String senha) {
         this.senha = senha;
     }
-    public int getperfil (){
+
+    public PerfilUsuario getPerfil() {
         return perfil;
     }
-    public void setPerfil (int perfil){
+
+    public void setPerfil(PerfilUsuario perfil) {
         this.perfil = perfil;
     }
 }
